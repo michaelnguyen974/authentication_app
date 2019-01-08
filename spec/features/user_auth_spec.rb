@@ -36,4 +36,19 @@ RSpec.feature 'User Authentication' do
       expect(page).to have_content 'Sign in'
     end
   end
+
+    scenario 'user cannot sign up twice with the same email' do 
+      visit '/signup'
+      fill_in :email, with: 'test@test.com'
+      fill_in :password, with: 'secret123'
+      click_button 'Sign up'
+      click_button 'Log out'
+      visit '/signup'
+      fill_in :email, with: 'test@test.com'
+      fill_in :password, with: 'different_password'
+      click_button 'Sign up'
+      expect(page.current_path).to eq '/error'
+    end 
 end
+# user = User.authenticate
+# if user.count(:email => 'test@test.com') > 1 raise "User email already exists" 
